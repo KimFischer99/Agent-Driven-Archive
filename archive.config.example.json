@@ -6,15 +6,15 @@
   "workspaceRoot": "workspace",
   "domains": {
     "archive": {
-      "contentDir": "Archive/Cleaned_Data",
+      "contentDir": "Vault/Archive/Cleaned_Data",
       "routeBase": "/archive/viewer"
     },
     "blog": {
-      "contentDir": "Blog/Posts",
+      "contentDir": "Vault/Blog/Posts",
       "routeBase": "/blog"
     },
     "timeline_map": {
-      "contentDir": "Timeline_Map/Cleaned_Data",
+      "contentDir": "Vault/Timeline_Map/Cleaned_Data",
       "routeBase": "/timeline-map"
     }
   },

@@ -73,32 +73,35 @@ The recommended minimum is **2.5 agents**:
 
 ```
 workspace/
-├── Agent_Workspace/
-│   ├── sources_index/       # Source inventory
-│   ├── templates/           # Content templates
-│   ├── schemas/             # Frontmatter, SQLite, graph schemas
-│   ├── controlled_tags/     # Controlled vocabulary
-│   ├── derived_sqlite/      # Runtime SQLite databases
-│   ├── workflow.md          # Agent workflow instructions
-│   ├── activity_log.md      # Agent activity tracking
-│   ├── hot.md               # Current project state
-│   └── archive_manifest.md  # Domain & source policy manifest
-├── Primary_Sources/         # Raw source intake
-├── References/              # Reference materials
-├── Archive/
-│   ├── OCR/                 # Raw OCR output
-│   ├── Cleaned_Data/        # Cleaned Markdown → feeds demo site
-│   ├── Translation/         # Translated records
-│   └── SQLite/              # SQLite exports
-├── Blog/
-│   ├── Posts/               # Published blog posts
-│   └── SQLite/
-├── Timeline_Map/
-│   ├── OCR/
-│   ├── Cleaned_Data/        # Cleaned event records
-│   ├── Events_Anchors/      # Temporal anchors
-│   └── SQLite/
-└── Knowledge_Graph/         # Structured relation records
+├── Primary_Sources/          # Isolated — raw materials, not in Obsidian vault
+│   ├── Raw_Materials/        # Raw PDFs, documents, scans
+│   └── Images/               # Image files
+├── References/               # Isolated — reference materials
+├── Vault/                    # Obsidian-compatible vault (open this in Obsidian)
+│   ├── Agent_Workspace/
+│   │   ├── sources_index/    # Source inventory
+│   │   ├── templates/        # Content templates
+│   │   ├── schemas/          # Frontmatter, SQLite, graph schemas
+│   │   ├── controlled_tags/  # Controlled vocabulary
+│   │   ├── derived_sqlite/   # Runtime SQLite databases
+│   │   ├── workflow.md       # Agent workflow instructions
+│   │   ├── activity_log.md   # Agent activity tracking
+│   │   ├── hot.md            # Current project state
+│   │   └── archive_manifest.md # Domain & source policy
+│   ├── Archive/
+│   │   ├── OCR/              # Raw OCR output
+│   │   ├── Cleaned_Data/     # Cleaned Markdown → feeds demo site
+│   │   ├── Translation/      # Translated records
+│   │   └── SQLite/           # SQLite exports
+│   ├── Blog/
+│   │   ├── Posts/            # Published blog posts
+│   │   └── SQLite/
+│   ├── Timeline_Map/
+│   │   ├── OCR/
+│   │   ├── Cleaned_Data/     # Cleaned event records
+│   │   ├── Events_Anchors/   # Temporal anchors
+│   │   └── SQLite/
+│   └── Knowledge_Graph/      # Structured relation records
 ```
 
 ## 9. Permission Protocol
