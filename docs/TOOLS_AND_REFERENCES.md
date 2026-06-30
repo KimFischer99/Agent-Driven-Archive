@@ -88,7 +88,7 @@ These are useful when designing:
 - [MinerU](https://github.com/opendatalab/MinerU)
 - [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)
 - [Mistral OCR 4](https://mistral.ai/news/ocr-4/)
-- [MarkItDown](https://github.com/microsoft/markitdown) — Microsoft 开源的文档转 Markdown 工具，支持 PDF 和 DOCX，将已电子化文档快速转换为 agent-readable Markdown
+- [MarkItDown](https://github.com/microsoft/markitdown)
 - [HY-MT2 model collection](https://huggingface.co/collections/tencent/hy-mt2)
 
 These are useful for:
