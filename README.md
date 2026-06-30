@@ -17,6 +17,7 @@ The expected characteristics of a project that adopts this pipeline:
 - Low technical threshold for humanities and social-science researchers, curators, and small-project maintainers
 - Aside from server costs and AI token/subscription costs, the overall workflow is close to zero-cost. Server costs can often be minimized or made free through student credits, educational offers, or low-cost hosting
 - A single person can handle the full build + maintenance pipeline through AI-agent collaboration, with customisable agent behaviour, greatly reducing labour and communication overhead
+- A public-facing archive can still provide useful AI-assisted exploration through a constrained semi-agent layer that stays closer to citations and retrieval grounding, while keeping token usage and hallucination risk more controlled
 
 ## Project Purpose
 
@@ -68,6 +69,8 @@ In practice, a minimum of **2.5 agents** can carry the full workflow:
 - One server-side assistant agent
   Examples: `OpenClaw`, `Hermes`
 - One internal semi-agent in the product UI — a chatbot-like assistant that can call APIs/proxies, custom prompts, skills, and tools. In this workflow: `AI Sidebar`
+
+The `AI Sidebar` focuses on citation-aware, retrieval-aware, and translation-aware assistance inside the archive interface.
 
 ### Public App Pattern
 

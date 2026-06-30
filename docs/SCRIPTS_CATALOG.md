@@ -25,7 +25,7 @@
 - `skills/paddle-ocr-markdown/scripts/paddle_ocr_markdown.py`
   OCR + deterministic cleanup + optional local AI cleanup.
 - `skills/pdf-translation-local/scripts/translate_dual_pdf.sh`
-  Local dual-PDF translation orchestration.
+  Local PDF-to-dual-Markdown translation orchestration for the `Archive` batch-translation stage.
 
 ## Included But Still Starter-Level
 
@@ -52,4 +52,3 @@ They should be refactored before being added to the reusable repo.
 2. generic archive-viewer bundle/export pipeline
 3. generic timeline normalization pipeline
 4. generic SQLite validation scripts
-

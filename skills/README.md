@@ -7,7 +7,7 @@ These are **reference implementations**, not guaranteed plug-and-play packages f
 ## Included
 
 - `pdf-translation-local/`
-  A local dual-PDF translation workflow built around BabelDOC plus a local OpenAI-compatible LLM endpoint.
+  A local PDF-to-dual-Markdown translation workflow built around BabelDOC plus a local OpenAI-compatible LLM endpoint. In this repo it is intended to serve as the `Archive` batch-translation stage, not as a general cross-domain translation layer.
 - `paddle-ocr-markdown/`
   A batch PDF-to-Markdown OCR workflow using a PaddleOCR API plus optional local AI cleanup.
 

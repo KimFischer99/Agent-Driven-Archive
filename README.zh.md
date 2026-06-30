@@ -17,6 +17,7 @@
 - 面向人文社科研究者、策展人和小规模项目维护者的低技术门槛
 - 除去 server 成本和 AI token/订阅 成本之外，整体 workflow 基本接近零成本，server 成本通常可以通过学生优惠、教育额度或低成本 hosting 尽量压低，乃至免费
 - 通过与 AI Agents 协作，可以实现单人搭建+维护全流程handle，且 Agents 行为可自定义，大幅减少人力和沟通成本。
+- 即使是相对传统的 online archive，也可以通过受约束的 semi-agent 层接入真正有用的 AI features，并尽量贴近 citation 与 retrieval grounding，在控制 token 成本的同时降低幻觉和失真风险。
 
 ## 项目目的
 
@@ -66,6 +67,8 @@
 - 一个 building-side coding agent，例如：`Claude Code`、`Codex`、`Cursor`
 - 一个 server-side assistant agent，例如：`OpenClaw`、`Hermes`
 - 一个产品内部的 semi-agent，类chatbot，可接入API/代理，可调用自定义Prompt，Skill和Tool，在这个 workflow 中就是：`AI Sidebar`
+
+这里的 `AI Sidebar` 主要提供贴近 citation、local retrieval 和 translation support 的辅助能力。
 
 ### 公共站点模式
 

@@ -6,8 +6,8 @@
 primary sources
 -> source inventory
 -> OCR Markdown
+-> Archive-only dual-language translation Markdown when needed
 -> cleaned/tagged/structured Markdown
--> optional translation
 -> knowledge graph extraction
 -> domain exports
 -> SQLite / search index
@@ -134,13 +134,16 @@ Use the `Semi-Agent` for:
 ### 3. OCR Or Import Text
 
 - generate page-scoped Markdown from scans
+- for `Archive` batch processing, optionally generate dual-language translation Markdown directly from source PDFs
 - preserve original language/script
 - keep OCR output editable
+- keep archive translation output editable
 - do not publish raw OCR directly
 
 ### 4. Clean And Structure
 
 - normalize obvious OCR noise conservatively
+- cross-check archive translation output against the source before using it downstream
 - add frontmatter
 - assign tags
 - add source anchors

@@ -3,7 +3,7 @@
 Current archive domains:
 
 - `Archive`: primary-source OCR, cleaned data, translation, knowledge graph, and `archive.sqlite`.
-- `Blog`: research notes, public research blogs, translation, knowledge graph, and `blog.sqlite`.
+- `Blog`: research notes, public research blogs, knowledge graph, and `blog.sqlite`.
 - `Timeline_Map`: OCR / table cleaning, event anchors, place / date normalization, and `timeline_map.sqlite`.
 - `Knowledge_Graph`: cross-domain structured relations with source anchors.
 

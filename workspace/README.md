@@ -26,7 +26,7 @@ workspace/
     Archive/
       OCR/
       Cleaned_Data/
-      Translation/
+      Translation/          ← Archive-only editable dual-language or translated Markdown derived from source PDFs
       SQLite/
     Blog/
       Posts/

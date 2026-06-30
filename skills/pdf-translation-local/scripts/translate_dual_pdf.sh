@@ -11,6 +11,7 @@ if [ -z "$BABELDOC_RUNNER" ] && [ -n "$BABELDOC_ROOT" ]; then
 fi
 
 ignore_cache=0
+output_dir=""
 pdfs=()
 
 while [ "$#" -gt 0 ]; do
@@ -18,6 +19,14 @@ while [ "$#" -gt 0 ]; do
     --ignore-cache)
       ignore_cache=1
       shift
+      ;;
+    --output-dir)
+      if [ "$#" -lt 2 ]; then
+        echo "Missing value for --output-dir" >&2
+        exit 2
+      fi
+      output_dir="$2"
+      shift 2
       ;;
     -*)
       echo "Unsupported option: $1" >&2
@@ -31,7 +40,7 @@ while [ "$#" -gt 0 ]; do
 done
 
 if [ "${#pdfs[@]}" -eq 0 ]; then
-  echo "Usage: $0 [--ignore-cache] file.pdf [more.pdf ...]" >&2
+  echo "Usage: $0 [--ignore-cache] [--output-dir DIR] file.pdf [more.pdf ...]" >&2
   exit 2
 fi
 
@@ -72,10 +81,16 @@ for input in "${pdfs[@]}"; do
   input_dir="$(cd "$(dirname "$input")" && pwd -P)"
   input_name="$(basename "$input")"
   stem="${input_name%.[Pp][Dd][Ff]}"
-  source_output="$input_dir/${stem}.no_watermark.zh-CN.dual.md"
-  final_output="$input_dir/${stem}_dual.md"
+  target_dir="$input_dir"
+  if [ -n "$output_dir" ]; then
+    mkdir -p "$output_dir"
+    target_dir="$(cd "$output_dir" && pwd -P)"
+  fi
 
-  args=("$input_dir/$input_name" --output "$input_dir" --no-mono --body-only --hide-skipped --primary-font-family serif)
+  source_output="$target_dir/${stem}.no_watermark.zh-CN.dual.md"
+  final_output="$target_dir/${stem}_dual.md"
+
+  args=("$input_dir/$input_name" --output "$target_dir" --no-mono --body-only --hide-skipped --primary-font-family serif)
   if [ "$ignore_cache" -eq 1 ]; then
     args+=(--ignore-cache)
   fi

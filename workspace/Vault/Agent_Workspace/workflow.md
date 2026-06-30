@@ -6,9 +6,8 @@ This workspace stores reusable archive rules, schemas, tags, templates, and agen
 
 ```text
 external source
-→ OCR Markdown
+→ Archive OCR Markdown and/or Archive dual-language translation Markdown
 → cleaned / tagged / structured Markdown
-→ optional translation
 → knowledge graph extraction
 → domain SQLite
 → API / UI
@@ -17,7 +16,7 @@ external source
 ## Rules
 
 - External PDFs, images, and scans are indexed in `sources_index/`; do not edit them here.
-- OCR Markdown is the first editable archive layer.
+- For `Archive` batch processing, OCR Markdown or dual-language translation Markdown can serve as the first editable layer.
 - Tags are applied in domain `Cleaned_Data` frontmatter.
 - `controlled_tags/` stores the vocabulary only.
 - Knowledge Graph stores explicit relationships with source anchors.
@@ -30,9 +29,10 @@ external source
 ### Ingest
 
 1. Register the external source in `sources_index/`.
-2. Run OCR or import existing OCR Markdown into the relevant domain `OCR/`.
-3. Create or update cleaned Markdown using templates.
-4. Update `archive_manifest.md`, `hot.md`, and `activity_log.md`.
+2. Run OCR for the relevant domain, and run PDF translation when `Archive` batch processing needs a dual-language layer.
+3. Place OCR Markdown into the relevant domain `OCR/`. Place translation Markdown only into `Archive/Translation/`.
+4. Create or update cleaned Markdown using templates.
+5. Update `archive_manifest.md`, `hot.md`, and `activity_log.md`.
 
 ### Clean
 
