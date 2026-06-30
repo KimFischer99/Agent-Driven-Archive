@@ -1,0 +1,22 @@
+{
+  "site": {
+    "title": "Example Archive",
+    "baseUrl": "https://archive.example.org"
+  },
+  "workspaceRoot": "workspace",
+  "domains": {
+    "archive": {
+      "contentDir": "Archive/02_Cleaned_Data",
+      "routeBase": "/archive/viewer"
+    },
+    "blog": {
+      "contentDir": "Blog/02_Research_Blogs",
+      "routeBase": "/blog"
+    },
+    "timeline_map": {
+      "contentDir": "Timeline_Map/02_Cleaned_Data",
+      "routeBase": "/timeline-map"
+    }
+  },
+  "generatedDir": "generated"
+}

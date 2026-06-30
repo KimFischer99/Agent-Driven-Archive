@@ -1,0 +1,17 @@
+.DS_Store
+node_modules/
+.next/
+dist/
+build/
+demo-dist/
+__pycache__/
+.env
+.env.local
+archive.config.json
+skills/**/request.json
+runtime/*.sqlite
+runtime/*.log
+*.sqlite
+*.log
+coverage/
+tmp/

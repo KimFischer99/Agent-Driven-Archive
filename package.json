@@ -1,0 +1,23 @@
+{
+  "name": "agent-driven-archive",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "description": "Reusable workflow and starter scripts for agent-driven online archive building and maintenance.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "check:workspace": "node scripts/check-workspace-structure.mjs",
+    "export:manifest": "node scripts/export-source-manifest.mjs",
+    "build:search": "node scripts/build-search-index.mjs",
+    "build:all": "npm run check:workspace && npm run export:manifest && npm run build:search",
+    "demo:render": "node scripts/render-demo-site.mjs",
+    "demo:serve": "node scripts/serve-demo.mjs",
+    "demo:start": "npm run build:all && npm run demo:render && npm run demo:serve",
+    "contrib:init-db": "node scripts/init-contribution-agent-db.mjs",
+    "contrib:serve": "node server/contribution-agent-server.mjs",
+    "contrib:review": "node scripts/review-contribution-queue.mjs",
+    "contrib:mail": "node scripts/send-contribution-mails.mjs"
+  }
+}

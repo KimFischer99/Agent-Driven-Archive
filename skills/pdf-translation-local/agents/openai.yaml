@@ -1,0 +1,4 @@
+interface:
+  display_name: "Local PDF Translation"
+  short_description: "Translate PDFs locally with BabelDOC and an OpenAI-compatible endpoint."
+  default_prompt: "帮我翻译 PDF"
