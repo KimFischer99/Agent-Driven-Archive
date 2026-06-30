@@ -17,6 +17,14 @@ It also clarifies where different kinds of references belong inside this reposit
 - `docs/TOOLS_AND_REFERENCES.md`
   External reference links for design, archive examples, OCR, deployment, embedding, and project-management workflows.
 
+## Recommended Agent Stack
+
+- `Building Agent`: `Codex`
+- `Server Agent`: `Hermes`
+- `Semi-Agent`: `AI Sidebar`
+
+For the full `2.5-agent` role split and alternatives such as `Claude Code`, `Cursor`, or `OpenClaw`, see `docs/WORKFLOW.md`.
+
 ## Content And Project-Management Workflow
 
 - [Obsidian](https://obsidian.md/)
