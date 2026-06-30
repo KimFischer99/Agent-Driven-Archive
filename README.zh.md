@@ -8,9 +8,21 @@
 
 本仓库是柏林自由大学26年夏季学期课程 [Digital Humanities and Data Sustainability](https://14141-dh-sustainability.github.io/) 的最终成果。基于此仓库构建的数字人文项目 Stylus Nexus (Beta vO.1.1) 已经上线，可供访问。
 
+描述本 workflow 设计与理念的预印本论文已包含在本仓库中：**[Stylus Nexus: Agent-Driven Online Archive Building and Maintenance](./Stylus%20Nexus_Agent-Driven%20Online%20Archive%20Building%20and%20Maintenance_Report.pdf)** (Zhou & Dingir, 2026)。
+
 ## 设计初衷
 
-设计本项目的初衷，是希望借由与 AI Agents 深度协作，让个人线上数字人文项目的搭建与维护成本更低、技术门槛更低，且更可持续。
+设计本项目的初衷，是希望借由与 AI Agents 深度协作，让个人线上数字人文项目的搭建与维护成本更低、技术门槛更低，且更可持续。本仓库遵循 **template-instance 设计模式**：workflow、脚本、工作区骨架和模板可跨主题复用，而语料特定内容保留在项目实例中（如 Stylus Nexus archive）。
+
+架构为五层 source-derived pipeline：
+
+| 层 | 角色 |
+|-------|------|
+| **Source** | 原始扫描件、PDF、图像和 source inventory，与公开站点分离 |
+| **Editorial** | OCR 及清洗或翻译后的 Markdown，人类可读、Agent 可编辑 |
+| **Export** | 脚本生成 manifest、SQLite 数据库、search index 和 viewer assets |
+| **Application** | Web 应用渲染 catalogue、viewer、blog、timeline map 和 search 模块 |
+| **Agent** | Building、Server 和 Semi-Agent 角色分别支持构建、维护和读者辅助 |
 
 应用这套项目管线的预期是：
 
@@ -18,6 +30,7 @@
 - 除去 server 成本和 AI token/订阅 成本之外，整体 workflow 基本接近零成本，server 成本通常可以通过学生优惠、教育额度或低成本 hosting 尽量压低，乃至免费
 - 通过与 AI Agents 协作，可以实现单人搭建+维护全流程handle，且 Agents 行为可自定义，大幅减少人力和沟通成本。
 - 即使是相对传统的 online archive，也可以通过受约束的 semi-agent 层接入真正有用的 AI features，并尽量贴近 citation 与 retrieval grounding，在控制 token 成本的同时降低幻觉和失真风险。
+- 所有公开记录均为 source-derived：每条记录必须追溯到 primary source 文件、清洗后的 Markdown 文档、翻译或结构化事件记录。生成的数据文件是输出产物，而非 editorial ground truth。
 
 ## 项目目的
 

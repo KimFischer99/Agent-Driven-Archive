@@ -8,9 +8,21 @@ It covers the full pipeline from primary sources to a public-facing online archi
 
 This repository is the final outcome of the course [Digital Humanities and Data Sustainability](https://14141-dh-sustainability.github.io/), Summer Semester 2026, Freie Universität Berlin. A digital humanities project **Stylus Nexus (Beta vO.1.1)**, constructed from this repository, is already live and accessible.
 
+A preprint paper describing the design and rationale behind this workflow is included in this repository: **[Stylus Nexus: Agent-Driven Online Archive Building and Maintenance](./Stylus%20Nexus_Agent-Driven%20Online%20Archive%20Building%20and%20Maintenance_Report.pdf)** (Zhou & Dingir, 2026).
+
 ## Design Intent
 
-The goal is to make personal online digital-humanities projects cheaper, easier to build, and more sustainable through deep AI-agent collaboration.
+The goal is to make personal online digital-humanities projects cheaper, easier to build, and more sustainable through deep AI-agent collaboration. This repository follows a **template-instance design pattern**: the workflow, scripts, workspace skeleton, and templates are reusable across topics, while corpus-specific content stays in the project instance (such as the Stylus Nexus archive).
+
+The architecture is a five-layer source-derived pipeline:
+
+| Layer | Role |
+|-------|------|
+| **Source** | Raw scans, PDFs, images, and source inventory kept separate from the public site |
+| **Editorial** | OCR and cleaned or translated Markdown, human-readable and agent-editable |
+| **Export** | Scripts generate manifests, SQLite databases, search indexes, and viewer assets |
+| **Application** | Web app renders catalogue, viewer, blog, timeline map, and search modules |
+| **Agent** | Building, server, and semi-agent roles support construction, maintenance, and reader assistance |
 
 The expected characteristics of a project that adopts this pipeline:
 
@@ -18,6 +30,7 @@ The expected characteristics of a project that adopts this pipeline:
 - Aside from server costs and AI token/subscription costs, the overall workflow is close to zero-cost. Server costs can often be minimized or made free through student credits, educational offers, or low-cost hosting
 - A single person can handle the full build + maintenance pipeline through AI-agent collaboration, with customisable agent behaviour, greatly reducing labour and communication overhead
 - A public-facing archive can still provide useful AI-assisted exploration through a constrained semi-agent layer that stays closer to citations and retrieval grounding, while keeping token usage and hallucination risk more controlled
+- All public records are source-derived: every record must trace back to a primary source file, a cleaned Markdown document, a translation, or a structured event record. Generated data files are outputs, not editorial ground truth
 
 ## Project Purpose
 

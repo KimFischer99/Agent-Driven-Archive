@@ -2,84 +2,80 @@
 
 ## Design Principle
 
-The architecture should separate:
+The architecture follows a five-layer source-derived pipeline (Zhou & Dingir, 2026). Raw materials enter at the Source layer and remain separate from the public site. At each following layer, data is transformed through inspectable, editable, or generated stages until it reaches the public interface.
 
-- editorial workspace
-- generated data outputs
-- public application
-- agent workflows
-- deployment/runtime
+| Layer | Role |
+|-------|------|
+| **Source** | Raw scans, PDFs, images, and source inventory kept separate from the public site. |
+| **Editorial** | OCR and cleaned or translated Markdown remain human-readable and agent-editable. |
+| **Export** | Scripts generate manifests, SQLite databases, search indexes, and viewer assets. |
+| **Application** | Web app renders catalogue, viewer, blog, timeline map, and search modules. |
+| **Agent** | Building, server, and semi-agent roles support construction, maintenance, and reader assistance. |
 
-## Recommended Layers
+## Five-Layer Pipeline
 
-### 1. Content Workspace
+### 1. Source Layer
 
-Human-editable and agent-editable materials:
+Raw materials isolated from the public site and Obsidian vault:
 
-- OCR Markdown
-- cleaned records
-- blog drafts
-- timeline/map events
-- graph relations
-- source inventory
+- PDFs, scans, images, and born-digital documents
+- Source inventory with stable `source_id` values
+- Rights, provenance, and editorial status tracking
+- This layer stays in `workspace/Primary_Sources/` — never published directly
 
-### 2. Export Layer
+### 2. Editorial Layer
 
-Generated outputs derived from the workspace:
+Human-editable and agent-editable Markdown materials:
 
-- JSON
-- SQLite
-- search indexes
-- static assets prepared for the app
+- OCR Markdown (page-scoped, preserves original language/script)
+- Cleaned records with frontmatter, tags, and source anchors
+- Translation Markdown when needed
+- Blog drafts, timeline/map events, and graph relations
+- Controlled vocabulary and editorial status tracking
 
-### 3. Application Layer
+The editorial layer is designed to integrate naturally with Obsidian: the workspace is a plain Markdown folder structure that Obsidian opens directly, and agents read and write the same Markdown files — the human workspace and the agent workspace are the same workspace.
 
-Suggested stack based on the current build:
+### 3. Export Layer
 
-- Next.js
-- React
-- TypeScript
-- Tailwind CSS
+Generated outputs derived from the editorial layer (machine-output only, not hand-edited):
+
+- JSON manifests
+- SQLite databases (domain-specific: Archive, Blog, Timeline_Map)
+- Search indexes
+- Static assets prepared for the application
+
+### 4. Application Layer
+
+Public-facing web application:
+
+- Next.js + React + TypeScript + Tailwind CSS
 - Markdown rendering
-- optional map/timeline modules
+- Optional map/timeline modules (Leaflet)
+- AI sidebar as a first-class archive module, not a decorative chatbot
+- Citation tools and route-aware contextual assistance
 
-### 4. Agent Layer
+### 5. Agent Layer
 
-Possible agent responsibilities:
+Agent roles run across all pipeline stages:
 
-- source registration
-- OCR cleanup assistance
-- metadata normalization
-- citation support
-- contribution triage
-- maintenance QA
+| Agent | Role | Examples |
+|-------|------|----------|
+| **Building Agent (1)** | Coding, content processing, UI development, export pipelines | `Claude Code`, `Codex`, `Cursor` |
+| **Server Agent (1)** | Scheduled maintenance, contribution intake, automated review | `OpenClaw`, `Hermes` |
+| **Semi-Agent (0.5)** | In-app assistant for public readers — document-first, selection-aware, retrieval-grounded | `AI Sidebar` |
 
-For public-reader interaction, the in-app assistant should follow a document-first sidebar pattern:
+The division of agent labor avoids two risks: over-agentification (every task becoming its own autonomous role) and the generic chatbot problem (an archive with an unmoored AI widget). The semi-agent is document-first: selected text is normalized and attached to requests, local full-text search notes are added only when selection context exists, and the prompt instructs the assistant to treat attached selections as primary evidence and avoid invented citations.
 
-- user-scoped selections first
-- route-aware context
-- explicit provenance/citation support
-- retrieval-aware answering rather than generic free chat
+## Deployment / Runtime
 
-### 5. Runtime / Hosting Layer
+Recommended requirements for hosting the application layer:
 
-Recommended requirements:
+- A host capable of serving the public app (Linux VPS, home server, container host, or managed platform)
+- A reverse proxy (Caddy, Nginx, or equivalent)
+- A process manager (systemd, pm2, Docker, or equivalent)
+- A reproducible deploy/update workflow
 
-- a host capable of serving the public app
-- a way to reverse proxy or expose the app
-- a way to restart or supervise the app process
-- a reproducible deploy/update workflow
-
-Possible implementations include, but are not limited to:
-
-- Linux VPS
-- home server
-- container host
-- managed platform
-- reverse proxies such as Caddy or Nginx
-- process managers such as systemd, pm2, Docker, or another runtime supervisor
-
-These are examples, not fixed requirements.
+These are examples, not fixed requirements. This repository does not bind to a single deployment approach.
 
 ## Domain Model
 
@@ -107,28 +103,30 @@ Knowledge_Graph
 - AI sidebar
 - Citation tools
 
-The `AI sidebar` should be treated as a first-class archive module, not a decorative chatbot. Its interaction model is closer to document-assistance interfaces than to a generic site support widget.
+The AI sidebar should be treated as a first-class archive module, not a decorative chatbot. Its interaction model is closer to document-assistance interfaces than to a generic site support widget.
 
-## Extraction Priorities From The Source Project
+## Extraction Priorities
+
+Derived from the extraction map that separates reusable workflow from project-specific content.
 
 ### Reusable Now
 
-- workflow shape
-- content domain separation
+- Workflow shape and domain separation
 - Markdown templates
-- source-anchor model
+- Source-anchor model
+- Source inventory conventions
 - Archive/Blog/Timeline_Map split
 
 ### Reusable With Refactor
 
-- export scripts
-- archive viewer contracts
-- citation utilities
+- Export scripts
+- Archive viewer contracts
+- Citation utilities
 - AI sidebar injection flow
 
-### Project-Specific And Not For Direct Reuse
+### Project-Specific (Not For Direct Reuse)
 
-- subject-matter copy
-- topic-specific essays
-- branded visuals
-- hard-coded corpus assumptions
+- Subject-matter prose
+- Topic-specific essays
+- Branded visuals
+- Hard-coded corpus assumptions

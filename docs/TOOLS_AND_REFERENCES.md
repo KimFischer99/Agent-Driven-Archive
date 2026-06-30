@@ -154,6 +154,20 @@ These are useful for:
 - contextual scholarly linking
 - citation workflow integration
 
+## Scholarly References
+
+The design of this workflow draws on the following academic work:
+
+- **Galey, A. and Ruecker, S. (2010).** How a prototype argues. *Literary and Linguistic Computing*, 25(4):405–424. — Prototypes as arguments through structure and affordances.
+- **Drucker, J. (2011).** Humanities approaches to graphical display. *Digital Humanities Quarterly*, 5(1):000091. — Ambiguity, uncertainty, and interpretive pressure in humanities data.
+- **Owens, T. (2018).** *The Theory and Craft of Digital Preservation.* Johns Hopkins University Press. — Preservation as an ongoing craft joining technical care with organizational practice.
+- **Lewis, P., et al. (2020).** Retrieval-augmented generation for knowledge-intensive NLP tasks. arXiv:2005.11401. — RAG: generator + retrieved evidence.
+- **Casey, C. (2023).** Building digital projects to outlive their funding. *AVAR*, 2(2):355–378. — Sustainability challenges for grant-funded digital projects.
+- **Alieva, A., Bozan, J. S., Müller-Laackman, J., and Kudela, M. X. (2024).** HOW TO BE FAIR? – managing and archiving digital corpora. Blog post, *Closing the Gap in Non-Latin-Script Data*. — FAIR corpus management guidelines.
+- **Guo, Z., Xia, L., Yu, Y., Ao, T., and Huang, C. (2024).** LightRAG: Simple and fast retrieval-augmented generation. arXiv:2410.05779. — Graph-aware retrieval extension.
+- **Digital Humanities Climate Coalition (2025).** Minimal computing. *DHCC Toolkit*. — Values small, maintainable, locally appropriate systems.
+- **Zhou, X. and Dingir (2026).** Stylus Nexus: Agent-driven online archive building and maintenance. Preprint. — The paper describing this workflow and its design rationale. Included in this repository.
+
 ## Notes
 
 - Keep the tool list public and auditable.
