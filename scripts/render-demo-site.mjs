@@ -8,9 +8,9 @@ const workspaceRoot = path.join(root, "workspace");
 const distRoot = path.join(root, "demo-dist");
 const config = readConfig();
 
-const archiveDocs = loadDocs(path.join(workspaceRoot, "Archive", "02_Cleaned_Data"), "/archive");
-const blogDocs = loadDocs(path.join(workspaceRoot, "Blog", "02_Research_Blogs"), "/blog");
-const timelineDocs = loadDocs(path.join(workspaceRoot, "Timeline_Map", "02_Cleaned_Data"), "/timeline-map");
+const archiveDocs = loadDocs(path.join(workspaceRoot, "Archive", "Cleaned_Data"), "/archive");
+const blogDocs = loadDocs(path.join(workspaceRoot, "Blog", "Posts"), "/blog");
+const timelineDocs = loadDocs(path.join(workspaceRoot, "Timeline_Map", "Cleaned_Data"), "/timeline-map");
 
 writePage(
   path.join(distRoot, "index.html"),

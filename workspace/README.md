@@ -12,18 +12,18 @@ workspace/
   References/
   sources_index/
   Archive/
-    01_OCR/
-    02_Cleaned_Data/
-    03_Translation/
-    05_SQLite/
+    OCR/
+    Cleaned_Data/
+    Translation/
+    SQLite/
   Blog/
-    02_Research_Blogs/
-    05_SQLite/
+    Posts/
+    SQLite/
   Timeline_Map/
-    01_OCR/
-    02_Cleaned_Data/
-    03_Events_Anchors/
-    04_SQLite/
+    OCR/
+    Cleaned_Data/
+    Events_Anchors/
+    SQLite/
   Knowledge_Graph/
 ```
 

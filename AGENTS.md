@@ -57,7 +57,7 @@ Define success criteria. Loop until verified. For multi-step tasks:
 - Agents may read, clean, and generate workspace content — but **must not fabricate** source records, event data, relationship claims, or blog content.
 - Every record must trace back to a primary source or explicit reference.
 - `generated/` is machine-output only. Do not edit by hand.
-- Scripts write to `generated/` or domain `05_SQLite/` / `04_SQLite/` directories. They must not write into content directories.
+- Scripts write to `generated/` or domain `SQLite/` directories. They must not write into content directories.
 
 ## 7. Agent Model (reference)
 
@@ -77,18 +77,18 @@ workspace/
 ├── References/             # Reference materials
 ├── sources_index/          # Source inventory
 ├── Archive/
-│   ├── 01_OCR/             # Raw OCR output
-│   ├── 02_Cleaned_Data/    # Cleaned Markdown → feeds demo site
-│   ├── 03_Translation/     # Translated records
-│   └── 05_SQLite/          # SQLite exports
+│   ├── OCR/                # Raw OCR output
+│   ├── Cleaned_Data/       # Cleaned Markdown → feeds demo site
+│   ├── Translation/        # Translated records
+│   └── SQLite/             # SQLite exports
 ├── Blog/
-│   ├── 02_Research_Blogs/  # Published blog posts
-│   └── 05_SQLite/
+│   ├── Posts/              # Published blog posts
+│   └── SQLite/
 ├── Timeline_Map/
-│   ├── 01_OCR/
-│   ├── 02_Cleaned_Data/    # Cleaned event records
-│   ├── 03_Events_Anchors/  # Temporal anchors
-│   └── 04_SQLite/
+│   ├── OCR/
+│   ├── Cleaned_Data/       # Cleaned event records
+│   ├── Events_Anchors/     # Temporal anchors
+│   └── SQLite/
 └── Knowledge_Graph/        # Structured relation records
 ```
 
