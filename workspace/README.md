@@ -8,9 +8,18 @@ It can also be used directly as an Obsidian vault or as a subfolder inside an ex
 
 ```text
 workspace/
+  Agent_Workspace/
+    sources_index/
+    templates/
+    schemas/
+    controlled_tags/
+    derived_sqlite/
+    workflow.md
+    activity_log.md
+    hot.md
+    archive_manifest.md
   Primary_Sources/
   References/
-  sources_index/
   Archive/
     OCR/
     Cleaned_Data/

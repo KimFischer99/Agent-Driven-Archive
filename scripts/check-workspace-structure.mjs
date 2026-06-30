@@ -9,7 +9,12 @@ const workspaceRoot = path.join(root, "workspace");
 const requiredPaths = [
   "Primary_Sources",
   "References",
-  "sources_index",
+  "Agent_Workspace",
+  "Agent_Workspace/sources_index",
+  "Agent_Workspace/controlled_tags",
+  "Agent_Workspace/schemas",
+  "Agent_Workspace/templates",
+  "Agent_Workspace/derived_sqlite",
   "Archive/OCR",
   "Archive/Cleaned_Data",
   "Archive/Translation",
