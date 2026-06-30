@@ -124,7 +124,7 @@ npm run demo:start
 
 用你自己的语料替换 `workspace/` 下的示例内容。
 
-工作区结构可以按项目需要调整，常见内容包括：
+工作区结构可以按项目需要调整；调整后请同步更新 `archive.config.json` 或 `archive.config.example.json` 中的 `workspaceValidation.requiredPaths`，让 `npm run check:workspace` 校验的是你的实际结构。常见内容包括：
 
 - source records 与 cleaned texts
 - essays、notes 或 interpretive writing
@@ -200,4 +200,3 @@ npm run contrib:mail
 - [docs/RAG_STRATEGY.md](./docs/RAG_STRATEGY.md)：retrieval / RAG 方向
 - [docs/AI_SIDEBAR_NOTES.md](./docs/AI_SIDEBAR_NOTES.md)：sidebar 交互模型
 - [docs/ROADMAP.md](./docs/ROADMAP.md)：后续路线图
-

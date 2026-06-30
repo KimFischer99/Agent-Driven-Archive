@@ -8,6 +8,7 @@ const root = process.cwd();
 const defaultDbPath = path.join(root, "runtime", "contribution-agent.sqlite");
 
 export function resolveAgentConfig() {
+  rejectLegacyCommandEnv();
   return {
     dbPath: process.env.CONTRIB_DB_PATH || defaultDbPath,
     projectName: process.env.CONTRIB_PROJECT_NAME || "Agent-Driven Archive",
@@ -15,10 +16,13 @@ export function resolveAgentConfig() {
     managerEmail: process.env.CONTRIB_MANAGER_EMAIL || "",
     mailFrom: process.env.CONTRIB_MAIL_FROM || "archive-bot@example.org",
     mailTransport: process.env.CONTRIB_MAIL_TRANSPORT || "stdout",
-    sendmailCommand: process.env.CONTRIB_SENDMAIL_CMD || "sendmail -t -i",
+    sendmailBin: process.env.CONTRIB_SENDMAIL_BIN || "sendmail",
+    sendmailArgs: parseCommandArgsEnv("CONTRIB_SENDMAIL_ARGS", ["-t", "-i"]),
     reviewerMode: process.env.CONTRIB_REVIEW_MODE || "heuristic",
-    reviewerCommand: process.env.CONTRIB_AGENT_REVIEW_CMD || "",
+    reviewerBin: String(process.env.CONTRIB_AGENT_REVIEW_BIN || "").trim(),
+    reviewerArgs: parseCommandArgsEnv("CONTRIB_AGENT_REVIEW_ARGS", []),
     port: Number(process.env.PORT || 4310),
+    host: process.env.CONTRIB_HOST || "127.0.0.1",
   };
 }
 
@@ -151,13 +155,46 @@ export function normalizeContributionPayload(payload) {
 }
 
 export function validateContributionPayload(payload) {
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+    return { ok: false, error: "Payload must be a JSON object." };
+  }
+
   const required = ["material_title", "contributor_name", "contributor_email", "description"];
   const missing = required.filter((field) => !String(payload[field] || "").trim());
   if (missing.length) {
     return { ok: false, error: `Missing required fields: ${missing.join(", ")}` };
   }
-  if (!String(payload.contributor_email).includes("@")) {
+
+  const normalized = normalizeContributionPayload(payload);
+  const textLimits = {
+    material_title: 300,
+    contributor_name: 200,
+    contributor_email: 320,
+    institutional_affiliations: 500,
+    external_link: 2048,
+    description: 20_000,
+    rights_note: 2_000,
+    source_date: 64,
+    source_type: 120,
+  };
+
+  for (const [field, maxLength] of Object.entries(textLimits)) {
+    if (normalized[field].length > maxLength) {
+      return { ok: false, error: `${field} exceeds maximum length ${maxLength}.` };
+    }
+    if (containsUnsafeHeaderChars(normalized[field])) {
+      return { ok: false, error: `${field} contains unsupported control characters.` };
+    }
+  }
+
+  if (!isValidEmail(normalized.contributor_email)) {
     return { ok: false, error: "Invalid contributor_email." };
+  }
+  if (normalized.external_link && !isValidHttpUrl(normalized.external_link)) {
+    return { ok: false, error: "Invalid external_link." };
+  }
+  if (normalized.source_date && !isValidSourceDate(normalized.source_date)) {
+    return { ok: false, error: "Invalid source_date. Use YYYY, YYYY-MM, or YYYY-MM-DD." };
   }
   return { ok: true };
 }
@@ -176,7 +213,7 @@ export function reviewPendingContributions(db, config = resolveAgentConfig()) {
 
   for (const row of pending) {
     const payload = JSON.parse(row.payload_json);
-    const result = config.reviewerCommand
+    const result = config.reviewerBin
       ? runExternalReviewer(payload, config)
       : heuristicReview(payload);
 
@@ -209,7 +246,7 @@ export function reviewPendingContributions(db, config = resolveAgentConfig()) {
 }
 
 function runExternalReviewer(payload, config) {
-  const stdout = execFileSync("sh", ["-lc", config.reviewerCommand], {
+  const stdout = execFileSync(config.reviewerBin, config.reviewerArgs, {
     input: JSON.stringify(payload),
     encoding: "utf8",
   }).trim();
@@ -286,7 +323,7 @@ function deliverMail(rawEmail, config) {
   }
 
   if (config.mailTransport === "sendmail") {
-    execFileSync("sh", ["-lc", config.sendmailCommand], {
+    execFileSync(config.sendmailBin, config.sendmailArgs, {
       input: rawEmail,
       encoding: "utf8",
       stdio: ["pipe", "ignore", "pipe"],
@@ -299,9 +336,9 @@ function deliverMail(rawEmail, config) {
 
 function buildRawEmail(from, to, subject, bodyText) {
   return [
-    `From: ${from}`,
-    `To: ${to}`,
-    `Subject: ${subject}`,
+    `From: ${sanitizeMailHeaderValue(from, "from")}`,
+    `To: ${sanitizeMailHeaderValue(to, "to")}`,
+    `Subject: ${sanitizeMailHeaderValue(subject, "subject")}`,
     "Content-Type: text/plain; charset=utf-8",
     "",
     bodyText,
@@ -367,6 +404,68 @@ function buildManagerDigest(config, reviewed) {
     "",
     `Generated from ${reviewed.length} reviewed contribution(s).`,
   ].join("\n");
+}
+
+function parseCommandArgsEnv(envName, fallback) {
+  const raw = process.env[envName];
+  if (!raw) return fallback;
+
+  let parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    throw new Error(`${envName} must be a JSON array of string arguments.`);
+  }
+
+  if (!Array.isArray(parsed) || parsed.some((item) => typeof item !== "string")) {
+    throw new Error(`${envName} must be a JSON array of string arguments.`);
+  }
+
+  return parsed;
+}
+
+function rejectLegacyCommandEnv() {
+  const legacyVars = ["CONTRIB_SENDMAIL_CMD", "CONTRIB_AGENT_REVIEW_CMD"].filter(
+    (name) => process.env[name]
+  );
+  if (legacyVars.length) {
+    throw new Error(
+      `Legacy shell command env vars are no longer supported: ${legacyVars.join(", ")}. Use *_BIN plus *_ARGS JSON instead.`
+    );
+  }
+}
+
+function isValidEmail(value) {
+  if (containsUnsafeHeaderChars(value)) return false;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/u.test(value);
+}
+
+function isValidHttpUrl(value) {
+  try {
+    const url = new URL(value);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+function isValidSourceDate(value) {
+  return /^\d{4}(?:-\d{2}(?:-\d{2})?)?$/u.test(value);
+}
+
+function containsUnsafeHeaderChars(value) {
+  return /[\r\n\0]/u.test(value);
+}
+
+function sanitizeMailHeaderValue(value, label) {
+  const normalized = String(value || "").trim();
+  if (!normalized) {
+    throw new Error(`Mail header ${label} must not be empty.`);
+  }
+  if (containsUnsafeHeaderChars(normalized)) {
+    throw new Error(`Mail header ${label} contains unsupported control characters.`);
+  }
+  return normalized;
 }
 
 function explainError(error) {

@@ -29,6 +29,13 @@ The starter HTTP server exposes:
 
 - `POST /api/contributions`
 - `GET /health`
+- `OPTIONS /api/contributions`
+
+Default network boundary:
+
+- binds to `127.0.0.1` by default
+- allows browser CORS requests from localhost origins only
+- accepts a custom origin allowlist through `CONTRIB_ALLOWED_ORIGINS`
 
 Expected JSON fields:
 
@@ -83,7 +90,10 @@ Environment variables:
 
 - `CONTRIB_MAIL_TRANSPORT=stdout|sendmail`
 - `CONTRIB_MAIL_FROM=archive-bot@example.org`
-- `CONTRIB_SENDMAIL_CMD="sendmail -t -i"`
+- `CONTRIB_SENDMAIL_BIN=sendmail`
+- `CONTRIB_SENDMAIL_ARGS='["-t","-i"]'`
+- `CONTRIB_HOST=127.0.0.1`
+- `CONTRIB_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000`
 
 ## Agent Review
 
@@ -100,7 +110,9 @@ Default mode:
 Optional external reviewer:
 
 ```bash
-CONTRIB_AGENT_REVIEW_CMD='python3 reviewer.py'
+CONTRIB_AGENT_REVIEW_BIN=python3 \
+CONTRIB_AGENT_REVIEW_ARGS='["reviewer.py"]' \
+node scripts/review-contribution-queue.mjs
 ```
 
 The external reviewer should read one JSON payload from stdin and return JSON like:
@@ -117,6 +129,14 @@ Allowed statuses:
 - `approved_agent`
 - `needs_human_review`
 - `rejected_agent`
+
+Validation rules:
+
+- required fields must be non-empty strings
+- `contributor_email` must be a plain email address
+- `external_link`, when present, must be `http` or `https`
+- `source_date`, when present, must use `YYYY`, `YYYY-MM`, or `YYYY-MM-DD`
+- control characters such as CR/LF are rejected in all fields
 
 ## Manager Digest
 
@@ -157,3 +177,8 @@ These are examples only. The repo does not require cron specifically; any schedu
 4. `CONTRIB_MAIL_TRANSPORT=stdout node scripts/send-contribution-mails.mjs`
 5. `CONTRIB_MANAGER_EMAIL=maintainer@example.org node scripts/review-contribution-queue.mjs`
 6. `CONTRIB_MAIL_TRANSPORT=stdout CONTRIB_MANAGER_EMAIL=maintainer@example.org node scripts/send-contribution-mails.mjs`
+
+Notes:
+
+- legacy shell string variables `CONTRIB_SENDMAIL_CMD` and `CONTRIB_AGENT_REVIEW_CMD` are no longer supported
+- use `*_BIN` plus `*_ARGS` JSON instead of shell command strings

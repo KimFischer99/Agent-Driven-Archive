@@ -1,33 +1,12 @@
 #!/usr/bin/env node
 
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 
 const root = process.cwd();
-const workspaceRoot = path.join(root, "workspace");
-
-const requiredPaths = [
-  "Primary_Sources/Raw_Materials",
-  "Primary_Sources/Images",
-  "References",
-  "Vault/Agent_Workspace",
-  "Vault/Agent_Workspace/sources_index",
-  "Vault/Agent_Workspace/controlled_tags",
-  "Vault/Agent_Workspace/schemas",
-  "Vault/Agent_Workspace/templates",
-  "Vault/Agent_Workspace/derived_sqlite",
-  "Vault/Archive/OCR",
-  "Vault/Archive/Cleaned_Data",
-  "Vault/Archive/Translation",
-  "Vault/Archive/SQLite",
-  "Vault/Blog/Posts",
-  "Vault/Blog/SQLite",
-  "Vault/Timeline_Map/OCR",
-  "Vault/Timeline_Map/Cleaned_Data",
-  "Vault/Timeline_Map/Events_Anchors",
-  "Vault/Timeline_Map/SQLite",
-  "Vault/Knowledge_Graph",
-];
+const config = readConfig();
+const workspaceRoot = path.join(root, config.workspaceRoot);
+const requiredPaths = readRequiredPaths(config);
 
 const missing = requiredPaths.filter((relativePath) => !existsSync(path.join(workspaceRoot, relativePath)));
 
@@ -46,3 +25,17 @@ console.log(JSON.stringify({
   checked: requiredPaths,
 }, null, 2));
 
+function readConfig() {
+  const preferred = path.join(root, "archive.config.json");
+  const fallback = path.join(root, "archive.config.example.json");
+  const configPath = existsSync(preferred) ? preferred : fallback;
+  return JSON.parse(readFileSync(configPath, "utf8"));
+}
+
+function readRequiredPaths(config) {
+  const requiredPaths = config.workspaceValidation?.requiredPaths;
+  if (!Array.isArray(requiredPaths) || requiredPaths.some((item) => typeof item !== "string")) {
+    throw new Error("workspaceValidation.requiredPaths must be an array of strings.");
+  }
+  return requiredPaths;
+}

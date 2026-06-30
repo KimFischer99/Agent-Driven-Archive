@@ -1,16 +1,53 @@
 #!/usr/bin/env node
 
-import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
 const root = process.cwd();
-const workspaceRoot = path.join(root, "workspace");
-const distRoot = path.join(root, "demo-dist");
 const config = readConfig();
+const workspaceRoot = path.join(root, config.workspaceRoot);
+const distRoot = path.join(root, "demo-dist");
+rmSync(distRoot, { recursive: true, force: true });
+const domainSpecs = [
+  {
+    key: "archive",
+    title: "Archive",
+    description: "Source-near records and cleaned documents.",
+    statLabel: "record(s)",
+    cardDescription: "Source-near records and cleaned texts.",
+  },
+  {
+    key: "blog",
+    title: "Blog",
+    description: "Contextual and methodological writing.",
+    statLabel: "post(s)",
+    cardDescription: "Contextual essays and methodological notes.",
+  },
+  {
+    key: "timeline_map",
+    title: "Timeline & Map",
+    description: "Normalized events and place/date notes.",
+    statLabel: "event file(s)",
+    cardDescription: "Normalized events, dates, and places.",
+  },
+];
 
-const archiveDocs = loadDocs(path.join(workspaceRoot, "Vault", "Archive", "Cleaned_Data"), "/archive");
-const blogDocs = loadDocs(path.join(workspaceRoot, "Vault", "Blog", "Posts"), "/blog");
-const timelineDocs = loadDocs(path.join(workspaceRoot, "Vault", "Timeline_Map", "Cleaned_Data"), "/timeline-map");
+const domains = domainSpecs.map((spec) => {
+  const domainConfig = config.domains[spec.key];
+  const routeBase = normalizeRouteBase(domainConfig.routeBase);
+  const docs = loadDocs(path.join(workspaceRoot, domainConfig.contentDir), routeBase);
+  return {
+    ...spec,
+    ...domainConfig,
+    routeBase,
+    routeBaseDir: routeToDir(routeBase),
+    docs,
+  };
+});
+
+const archiveDomain = domains.find((domain) => domain.key === "archive");
+const blogDomain = domains.find((domain) => domain.key === "blog");
+const timelineDomain = domains.find((domain) => domain.key === "timeline_map");
 
 writePage(
   path.join(distRoot, "index.html"),
@@ -22,15 +59,15 @@ writePage(
         <h1>${escapeHtml(config.site.title)}</h1>
         <p class="lead">A starter repository for building topic-specific online archives with a structured content workspace, export scripts, retrieval hooks, and AI-assisted maintenance workflows.</p>
         <div class="hero-links">
-          <a href="/archive/">Browse Archive</a>
-          <a href="/blog/">Read Blog</a>
-          <a href="/timeline-map/">View Timeline</a>
+          <a href="${archiveDomain.routeBase}/">Browse Archive</a>
+          <a href="${blogDomain.routeBase}/">Read Blog</a>
+          <a href="${timelineDomain.routeBase}/">View Timeline</a>
         </div>
       </section>
       <section class="grid">
-        ${renderCard("Archive", `${archiveDocs.length} record(s)`, "Source-near records and cleaned texts.", "/archive/")}
-        ${renderCard("Blog", `${blogDocs.length} post(s)`, "Contextual essays and methodological notes.", "/blog/")}
-        ${renderCard("Timeline", `${timelineDocs.length} event file(s)`, "Normalized events, dates, and places.", "/timeline-map/")}
+        ${renderCard("Archive", `${archiveDomain.docs.length} ${archiveDomain.statLabel}`, archiveDomain.cardDescription, `${archiveDomain.routeBase}/`)}
+        ${renderCard("Blog", `${blogDomain.docs.length} ${blogDomain.statLabel}`, blogDomain.cardDescription, `${blogDomain.routeBase}/`)}
+        ${renderCard("Timeline", `${timelineDomain.docs.length} ${timelineDomain.statLabel}`, timelineDomain.cardDescription, `${timelineDomain.routeBase}/`)}
       </section>
       <section class="panel">
         <h2>Starter Workflow</h2>
@@ -45,49 +82,27 @@ writePage(
   )
 );
 
-writePage(
-  path.join(distRoot, "archive", "index.html"),
-  renderListingPage("Archive", "Source-near records and cleaned documents.", archiveDocs, "/archive")
-);
-
-writePage(
-  path.join(distRoot, "blog", "index.html"),
-  renderListingPage("Blog", "Contextual and methodological writing.", blogDocs, "/blog")
-);
-
-writePage(
-  path.join(distRoot, "timeline-map", "index.html"),
-  renderListingPage("Timeline & Map", "Normalized events and place/date notes.", timelineDocs, "/timeline-map")
-);
-
-for (const doc of archiveDocs) {
+for (const domain of domains) {
   writePage(
-    path.join(distRoot, "archive", doc.slug, "index.html"),
-    renderDocPage("Archive", doc, "/archive/")
+    path.join(distRoot, domain.routeBaseDir, "index.html"),
+    renderListingPage(domain.title, domain.description, domain.docs)
   );
-}
 
-for (const doc of blogDocs) {
-  writePage(
-    path.join(distRoot, "blog", doc.slug, "index.html"),
-    renderDocPage("Blog", doc, "/blog/")
-  );
-}
-
-for (const doc of timelineDocs) {
-  writePage(
-    path.join(distRoot, "timeline-map", doc.slug, "index.html"),
-    renderDocPage("Timeline & Map", doc, "/timeline-map/")
-  );
+  for (const doc of domain.docs) {
+    writePage(
+      path.join(distRoot, domain.routeBaseDir, doc.slug, "index.html"),
+      renderDocPage(domain.title, doc, `${domain.routeBase}/`)
+    );
+  }
 }
 
 console.log(JSON.stringify({
   ok: true,
   output: path.relative(root, distRoot),
   counts: {
-    archive: archiveDocs.length,
-    blog: blogDocs.length,
-    timeline_map: timelineDocs.length,
+    archive: archiveDomain.docs.length,
+    blog: blogDomain.docs.length,
+    timeline_map: timelineDomain.docs.length,
   },
 }, null, 2));
 
@@ -169,7 +184,19 @@ function stripExtension(fileName) {
   return fileName.replace(/\.md$/, "");
 }
 
-function renderListingPage(sectionTitle, description, docs, backHref) {
+function normalizeRouteBase(routeBase) {
+  const normalized = String(routeBase || "").trim().replace(/\/+$/u, "");
+  if (!normalized.startsWith("/")) {
+    throw new Error(`routeBase must start with '/': ${routeBase}`);
+  }
+  return normalized || "/";
+}
+
+function routeToDir(routeBase) {
+  return routeBase.replace(/^\/+/u, "");
+}
+
+function renderListingPage(sectionTitle, description, docs) {
   return renderLayout(
     sectionTitle,
     `
