@@ -75,7 +75,7 @@ The focus is on the full pipeline: content processing, structuring, export, and 
 
 ### Agents Workflow Layer
 
-In practice, a minimum of **2.5 agents** can carry the full workflow:
+In practice, a minimum of **2.5 Agents** can carry the full workflow:
 
 - One building-side coding agent
   Examples: `Claude Code`, `Codex`, `Cursor`
@@ -190,7 +190,7 @@ npm run contrib:mail
 
 This starter already reserves structure for:
 
-- The 2.5-agent workflow setup
+- The 2.5 Agents workflow setup
 - OCR cleanup
 - Translation support
 - Citation-aware sidebar interaction

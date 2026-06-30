@@ -61,7 +61,7 @@ Define success criteria. Loop until verified. For multi-step tasks:
 
 ## 7. Agent Model (reference)
 
-The recommended minimum is **2.5 agents**:
+The recommended minimum is **2.5 Agents**:
 
 | Agent | Role | Examples |
 |-------|------|----------|

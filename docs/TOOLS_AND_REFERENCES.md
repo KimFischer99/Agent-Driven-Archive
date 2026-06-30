@@ -11,7 +11,7 @@ It also clarifies where different kinds of references belong inside this reposit
 - `README.md` / `README.zh.md`
   Course context, project purpose, cost model, and core stack.
 - `docs/WORKFLOW.md`
-  Workflow stages, the `2.5-agent` model, and practical role assignment.
+  Workflow stages, the `2.5 Agents` model, and practical role assignment.
 - `docs/RAG_STRATEGY.md`
   Retrieval architecture, local embedding strategy, vector retrieval, and LightRAG direction.
 - `docs/TOOLS_AND_REFERENCES.md`
@@ -23,7 +23,7 @@ It also clarifies where different kinds of references belong inside this reposit
 - `Server Agent`: `Hermes`
 - `Semi-Agent`: `AI Sidebar`
 
-For the full `2.5-agent` role split and alternatives such as `Claude Code`, `Cursor`, or `OpenClaw`, see `docs/WORKFLOW.md`.
+For the full `2.5 Agents` role split and alternatives such as `Claude Code`, `Cursor`, or `OpenClaw`, see `docs/WORKFLOW.md`.
 
 ## Content And Project-Management Workflow
 

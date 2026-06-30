@@ -40,7 +40,7 @@ These are structural requirements even if the surrounding app stack changes.
 - one server-side assistant agent if deployed maintenance is needed
 - one internal semi-agent if the public app includes an archive assistant
 
-In the recommended `2.5-agent` setup, these correspond to:
+In the recommended `2.5 Agents` setup, these correspond to:
 
 - `Building Agent`
   Examples: `Claude Code`, `Codex`, `Cursor`

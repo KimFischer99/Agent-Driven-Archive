@@ -34,7 +34,7 @@ primary sources
 
 ### 2.5 Recommended Agent Setup
 
-This project uses a `2.5-agent` model rather than a large multi-agent tree:
+This project uses a `2.5 Agents` model rather than a large multi-agent tree:
 
 - `1 Building Agent`
   The code/build-side agent that helps create and evolve the archive project itself.
