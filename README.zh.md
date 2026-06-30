@@ -124,7 +124,7 @@ npm run demo:start
 
 用你自己的语料替换 `workspace/` 下的示例内容。
 
-工作区结构可以按项目需要调整；调整后请同步更新 `archive.config.json` 或 `archive.config.example.json` 中的 `workspaceValidation.requiredPaths`，让 `npm run check:workspace` 校验的是你的实际结构。常见内容包括：
+工作区结构可以按项目需要调整；调整后请同步更新 `archive.config.json` 或 `archive.config.example.json` 中的 `workspaceValidation.requiredPaths`，让 `npm run check:workspace` 校验的是你的实际结构。如果你也调整 `routeBase`，请保持它是类似 `/archive/viewer` 这样的根路径子路径，并且不要带尾斜杠；starter demo 首页已经占用了 `/`。常见内容包括：
 
 - source records 与 cleaned texts
 - essays、notes 或 interpretive writing

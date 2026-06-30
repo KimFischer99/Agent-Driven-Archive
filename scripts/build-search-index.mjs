@@ -11,6 +11,7 @@ const generatedDir = path.join(root, config.generatedDir);
 const documents = [];
 
 for (const [domainName, domainConfig] of Object.entries(config.domains)) {
+  const routeBase = normalizeRouteBase(domainConfig.routeBase);
   const absoluteDir = path.join(workspaceRoot, domainConfig.contentDir);
   for (const filePath of listMarkdownFiles(absoluteDir)) {
     const raw = readFileSync(filePath, "utf8");
@@ -25,7 +26,7 @@ for (const [domainName, domainConfig] of Object.entries(config.domains)) {
       domain: domainName,
       title,
       slug,
-      route: `${domainConfig.routeBase}/${slug}`,
+      route: buildRoute(routeBase, slug),
       snippet: makeSnippet(body),
       body,
       tags,
@@ -112,4 +113,17 @@ function makeSnippet(text, maxLength = 220) {
 
 function stripExtension(fileName) {
   return fileName.replace(/\.md$/, "");
+}
+
+function normalizeRouteBase(routeBase) {
+  const raw = String(routeBase || "").trim();
+  if (!raw.startsWith("/")) {
+    throw new Error(`routeBase must start with '/': ${routeBase}`);
+  }
+  if (raw === "/") return "/";
+  return raw.replace(/\/+$/u, "");
+}
+
+function buildRoute(routeBase, slug) {
+  return routeBase === "/" ? `/${slug}` : `${routeBase}/${slug}`;
 }

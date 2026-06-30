@@ -34,7 +34,7 @@ const domainSpecs = [
 
 const domains = domainSpecs.map((spec) => {
   const domainConfig = config.domains[spec.key];
-  const routeBase = normalizeRouteBase(domainConfig.routeBase);
+  const routeBase = normalizeRouteBase(domainConfig.routeBase, { allowRoot: false });
   const docs = loadDocs(path.join(workspaceRoot, domainConfig.contentDir), routeBase);
   return {
     ...spec,
@@ -59,15 +59,15 @@ writePage(
         <h1>${escapeHtml(config.site.title)}</h1>
         <p class="lead">A starter repository for building topic-specific online archives with a structured content workspace, export scripts, retrieval hooks, and AI-assisted maintenance workflows.</p>
         <div class="hero-links">
-          <a href="${archiveDomain.routeBase}/">Browse Archive</a>
-          <a href="${blogDomain.routeBase}/">Read Blog</a>
-          <a href="${timelineDomain.routeBase}/">View Timeline</a>
+          <a href="${routeToListingHref(archiveDomain.routeBase)}">Browse Archive</a>
+          <a href="${routeToListingHref(blogDomain.routeBase)}">Read Blog</a>
+          <a href="${routeToListingHref(timelineDomain.routeBase)}">View Timeline</a>
         </div>
       </section>
       <section class="grid">
-        ${renderCard("Archive", `${archiveDomain.docs.length} ${archiveDomain.statLabel}`, archiveDomain.cardDescription, `${archiveDomain.routeBase}/`)}
-        ${renderCard("Blog", `${blogDomain.docs.length} ${blogDomain.statLabel}`, blogDomain.cardDescription, `${blogDomain.routeBase}/`)}
-        ${renderCard("Timeline", `${timelineDomain.docs.length} ${timelineDomain.statLabel}`, timelineDomain.cardDescription, `${timelineDomain.routeBase}/`)}
+        ${renderCard("Archive", `${archiveDomain.docs.length} ${archiveDomain.statLabel}`, archiveDomain.cardDescription, routeToListingHref(archiveDomain.routeBase))}
+        ${renderCard("Blog", `${blogDomain.docs.length} ${blogDomain.statLabel}`, blogDomain.cardDescription, routeToListingHref(blogDomain.routeBase))}
+        ${renderCard("Timeline", `${timelineDomain.docs.length} ${timelineDomain.statLabel}`, timelineDomain.cardDescription, routeToListingHref(timelineDomain.routeBase))}
       </section>
       <section class="panel">
         <h2>Starter Workflow</h2>
@@ -91,7 +91,7 @@ for (const domain of domains) {
   for (const doc of domain.docs) {
     writePage(
       path.join(distRoot, domain.routeBaseDir, doc.slug, "index.html"),
-      renderDocPage(domain.title, doc, `${domain.routeBase}/`)
+      renderDocPage(domain.title, doc, routeToListingHref(domain.routeBase))
     );
   }
 }
@@ -134,7 +134,7 @@ function loadDocs(dir, routeBase) {
       title: frontmatter.title || slug,
       summary: frontmatter.summary || firstParagraph(body),
       body,
-      route: `${routeBase}/${slug}/`,
+      route: buildDocRoute(routeBase, slug),
       sourcePath: path.relative(root, filePath),
       frontmatter,
     };
@@ -184,16 +184,30 @@ function stripExtension(fileName) {
   return fileName.replace(/\.md$/, "");
 }
 
-function normalizeRouteBase(routeBase) {
-  const normalized = String(routeBase || "").trim().replace(/\/+$/u, "");
-  if (!normalized.startsWith("/")) {
+function normalizeRouteBase(routeBase, { allowRoot = true } = {}) {
+  const raw = String(routeBase || "").trim();
+  if (!raw.startsWith("/")) {
     throw new Error(`routeBase must start with '/': ${routeBase}`);
   }
-  return normalized || "/";
+  if (raw === "/") {
+    if (!allowRoot) {
+      throw new Error("routeBase '/' is not supported by the demo renderer because the starter homepage already uses '/'.");
+    }
+    return "/";
+  }
+  return raw.replace(/\/+$/u, "");
 }
 
 function routeToDir(routeBase) {
   return routeBase.replace(/^\/+/u, "");
+}
+
+function routeToListingHref(routeBase) {
+  return routeBase === "/" ? "/" : `${routeBase}/`;
+}
+
+function buildDocRoute(routeBase, slug) {
+  return routeBase === "/" ? `/${slug}/` : `${routeBase}/${slug}/`;
 }
 
 function renderListingPage(sectionTitle, description, docs) {

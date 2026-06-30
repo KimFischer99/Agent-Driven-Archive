@@ -126,7 +126,7 @@ This will run the following in sequence:
 
 Replace the example files under `workspace/` with your own corpus materials.
 
-You can adapt the workspace layout to fit your project. When you do, update `workspaceValidation.requiredPaths` in `archive.config.json` or `archive.config.example.json` so `npm run check:workspace` validates your own structure. Common content types include:
+You can adapt the workspace layout to fit your project. When you do, update `workspaceValidation.requiredPaths` in `archive.config.json` or `archive.config.example.json` so `npm run check:workspace` validates your own structure. If you also change `routeBase`, keep it as a rooted subpath such as `/archive/viewer` without a trailing slash; the starter demo homepage already uses `/`. Common content types include:
 
 - Source records and cleaned texts
 - Essays, notes, or interpretive writing

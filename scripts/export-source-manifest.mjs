@@ -16,6 +16,7 @@ const manifest = {
 };
 
 for (const [domainName, domainConfig] of Object.entries(config.domains)) {
+  const routeBase = normalizeRouteBase(domainConfig.routeBase);
   const absoluteDir = path.join(workspaceRoot, domainConfig.contentDir);
   const files = listMarkdownFiles(absoluteDir).map((filePath) => {
     const relativePath = path.relative(workspaceRoot, filePath);
@@ -28,7 +29,7 @@ for (const [domainName, domainConfig] of Object.entries(config.domains)) {
       title,
       slug,
       relative_path: relativePath,
-      route: `${domainConfig.routeBase}/${slug}`,
+      route: buildRoute(routeBase, slug),
       updated_at: stats.mtime.toISOString(),
     };
   });
@@ -91,3 +92,15 @@ function stripExtension(fileName) {
   return fileName.replace(/\.md$/, "");
 }
 
+function normalizeRouteBase(routeBase) {
+  const raw = String(routeBase || "").trim();
+  if (!raw.startsWith("/")) {
+    throw new Error(`routeBase must start with '/': ${routeBase}`);
+  }
+  if (raw === "/") return "/";
+  return raw.replace(/\/+$/u, "");
+}
+
+function buildRoute(routeBase, slug) {
+  return routeBase === "/" ? `/${slug}` : `${routeBase}/${slug}`;
+}
