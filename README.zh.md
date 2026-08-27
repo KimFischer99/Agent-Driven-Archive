@@ -6,7 +6,7 @@
 
 它覆盖从 primary sources 到公开 online archive 的完整工作流和基础架构，适合作为可复刻、可扩展、可公开发布的基础仓库，让你的项目不必从零开始。
 
-本仓库是柏林自由大学26年夏季学期课程 [Digital Humanities and Data Sustainability](https://14141-dh-sustainability.github.io/) 的最终成果。基于此仓库构建的数字人文项目 [Stylus Nexus (Beta vO.1.1)](https://stylusnexus.localhost.cc/) 已经上线，可供访问。
+本工作流为柏林自由大学古代世界知识研究所 [Digital Humanities and Data Sustainability](https://14141-dh-sustainability.github.io/) 项目成果。基于本仓库构建的数字人文档案 **[Stylus Nexus (Beta v0.1.1)](https://stylusnexus.localhost.cc/)** 已上线，可公开访问。
 
 描述本 workflow 设计与理念的预印本论文已包含在本仓库中：**[Stylus Nexus: Agent-Driven Online Archive Building and Maintenance](./Stylus%20Nexus_Agent-Driven%20Online%20Archive%20Building%20and%20Maintenance_Report.pdf)** (Zhou & Dingir, 2026)。
 

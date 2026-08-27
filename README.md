@@ -6,7 +6,7 @@
 
 It covers the full pipeline from primary sources to a public-facing online archive, with a reusable base architecture. Fork it, extend it, and publish — without starting from scratch.
 
-This repository is the final outcome of the course [Digital Humanities and Data Sustainability](https://14141-dh-sustainability.github.io/), Summer Semester 2026, Freie Universität Berlin. A digital humanities project **[Stylus Nexus (Beta vO.1.1)](https://stylusnexus.localhost.cc/)**, constructed from this repository, is already live and accessible.
+This workflow was developed as part of the [Digital Humanities and Data Sustainability](https://14141-dh-sustainability.github.io/) project at the Institute for the History of Knowledge in the Ancient World, Freie Universität Berlin. **[Stylus Nexus (Beta v0.1.1)](https://stylusnexus.localhost.cc/)**, a digital humanities archive built from this repository, is already live and publicly accessible.
 
 A preprint paper describing the design and rationale behind this workflow is included in this repository: **[Stylus Nexus: Agent-Driven Online Archive Building and Maintenance](./Stylus%20Nexus_Agent-Driven%20Online%20Archive%20Building%20and%20Maintenance_Report.pdf)** (Zhou & Dingir, 2026).
 
